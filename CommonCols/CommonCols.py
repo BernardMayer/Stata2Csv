@@ -35,12 +35,27 @@ tsNow = dtNow.timestamp()
 ##  
 FileInSep = TAB #";"
 FileInHeader = True
-FileOutSep = TAB
+# FileOutSep = TAB
+# FileOutSep = "\n"
+FileOutSep = " "   # STATA attend une espace comme separateur
 FileOutHeader = False
 Verbose = True
 
-
 #bShowIdentifier = os.getenv("dsXidentifier", False)
+
+def mode_XCYF() :
+    #print(zeList)
+    ## On fabrique un ensemble de tout les entetes connus
+    setUnionAll = set()
+    setUnionAll = zeList[0]['ensemble']
+    for k, d in enumerate(zeList[1:]) :
+        #print(zeList[k]["file"], FileOutSep.join(sorted(zeList[k]["ensemble"]))[0:177]) #[0:77]
+        setUnionAll = setUnionAll.union(zeList[k]['ensemble'])
+    # print("setUnionAll :", str(setUnionAll)[0:123])
+    setUnionAll = sorted(setUnionAll)
+    # print("setUnionAll :", str(setUnionAll)[0:123])
+    # print("len(setUnionAll) :", len(setUnionAll))
+    
 
 def is_number(s):
     try:
@@ -54,7 +69,7 @@ def is_number(s):
 me = sys.argv[0]
 #args = sys.argv[1:]
 if (len(sys.argv) != 3) :
-    print(me + " : Pas le bon nombre de parametres.", file=sys.stderr)
+    print(me + " : Pas le bon nombre de parametres :-( !", file=sys.stderr)
     print("Usage : " + me + " <Fichier contenant la liste des fichiers a examiner> <Fichier en sortie>", file=sys.stderr)
     quit()
 else :
@@ -119,7 +134,6 @@ if (zeListLen < 2) :
     print("il n'y a pas assez de fichiers dans la liste ! FIN !", file=sys.stderr)
     exit()
 
-
 ##  Lecture de la premiere ligne de chaque fichier de la liste
 print("Extraction des 1ere lignes", file=sys.stderr)
 for d in zeList :
@@ -150,6 +164,18 @@ for k, d in enumerate(zeList[1:]) :
 # print(FileOutSep.join(sorted(setZero)))
 fDatasOut.write(FileOutSep.join(sorted(setZero)))
 fDatasOut.close()
+
+##  Mode <None>, XCYF, 
+mode = os.getenv('CommonCols_mode', "").upper()
+print("mode :", mode)
+if (mode == "XCYF") :
+    ret = mode_XCYF()
+elif (mode == "XFYC") :
+    pass
+    # print("2")
+else :
+    pass
+    # print("3")
 
 ##Fin de traitement
 print("Fin de traitement", file=sys.stderr)
