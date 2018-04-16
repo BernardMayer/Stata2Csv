@@ -12,3 +12,8 @@ Analyser un fichier texte, avec separateur
 ------------------------------------------
 Connaitre les types (physiques) de donnees 
 afin de preparer un import en base de donnees.
+
+# CommonCols
+Designer un ensemble de fichiers texte, avec separateur.
+A partir de leurs entetes, contenues sur leur premiere ligne,
+fournir la liste des entetes communes a l'ensemble des fichiers.
