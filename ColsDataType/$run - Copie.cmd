@@ -19,19 +19,18 @@
 REM @set datasIn="C:\CAT_dskD\_perso\Laurence\Echantillons\enquete.conforme.csv"
 REM @set datasOut="C:\CAT_dskD\_perso\Laurence\Echantillons\enquete.colsDataType.csv"
 
-@echo Analyse des fichiers CSV Stata
-
 REM set f=C:\Laurence\M1-S2\Datas_IN\indiv_2011q1-extrait
 set f=%homeDir%\indiv_2011q1
 @set datasIn="%f%.csv"
 @set datasOut="%f%.colsDataType.csv"
+@echo Analyse du fichier CSV Stata
 rem %pyBin% %script% %datasIn% %datasOut% 
 
-set f=%homeDir%\indiv_2012q4_234L
+set f=%homeDir%\indiv_2012q4
 %pyBin% %script% %f%.csv %f%.colsDataType.csv
+pause
+exit
 
-set f=%homeDir%\indiv_2011q1
-%pyBin% %script% %f%.csv %f%.colsDataType.csv
 set f=%homeDir%\indiv_2011q2
 %pyBin% %script% %f%.csv %f%.colsDataType.csv
 set f=%homeDir%\indiv_2011q3
@@ -44,8 +43,8 @@ set f=%homeDir%\indiv_2012q2
 %pyBin% %script% %f%.csv %f%.colsDataType.csv
 set f=%homeDir%\indiv_2012q3
 %pyBin% %script% %f%.csv %f%.colsDataType.csv
-@rem set f=%homeDir%\indiv_2012q4
-@rem %pyBin% %script% %f%.csv %f%.colsDataType.csv
+set f=%homeDir%\indiv_2012q4
+%pyBin% %script% %f%.csv %f%.colsDataType.csv
 set f=%homeDir%\indiv_2013q1
 %pyBin% %script% %f%.csv %f%.colsDataType.csv
 set f=%homeDir%\indiv_2013q2
@@ -78,4 +77,3 @@ set f=%homeDir%\indiv_2016q3
 %pyBin% %script% %f%.csv %f%.colsDataType.csv
 set f=%homeDir%\indiv_2016q4
 %pyBin% %script% %f%.csv %f%.colsDataType.csv
-

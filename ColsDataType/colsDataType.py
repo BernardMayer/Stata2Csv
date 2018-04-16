@@ -76,7 +76,7 @@ if (len(sys.argv) != 3) :
 else :
     datasIn  = sys.argv[1]
     datasOut = sys.argv[2]
-    print("Conformation du fichier CSV Stata [" + datasIn + "]")
+    print("Analyse du fichier CSV Stata [" + datasIn + "]")
 
 ## Tests prealables
 if (not os.path.exists(datasIn)) :
@@ -112,9 +112,11 @@ lCols = list()
 if (True) :
 # try :
     nLine = 0
-    with open(datasIn, 'r') as fDatasIn :
-        ## Purge de la table d'accueil
+    #with open(datasIn, encoding='utf-8', mode='r') as fDatasIn :
+    with open(datasIn, mode='r') as fDatasIn :
         for line in fDatasIn.readlines() :
+            if (False) :
+                print("Ligne :", nLine, "\t\t", line)
             ##  Verification / conformation de la ligne
             line = line.rstrip()
             if (line == "") :
@@ -126,13 +128,12 @@ if (True) :
             # if (not line[0:1].isalnum()) : 
                 # continue 
             nLine += 1
-
             cols = line.split(FileInSep)
             if (nLine == 1) :
                 # Initialisation de la structure de donnees
                 nCols = len(cols) # 428
                 for c in cols :
-                    lCols.append({"name":None, "areNull":"N", "varchar":0, "areInt":"N", "areLong":"N"})
+                    lCols.append({"name":None, "areEmpty":"Y", "areNull":"N", "varchar":0, "areInt":"N", "areFloat":"N", "decimal":"0.0"})
             # Faire test de numero de ligne
             if (FileInHeader and nLine == 1) : 
                 # On analyse la premiere ligne, c'est le header
@@ -142,20 +143,42 @@ if (True) :
                 continue
             for k, c in enumerate(cols) :
                 ##  Analyse de la ligne
-                # Une seule cellule a NULL et la colonne reste DEFINITIVEMENT comme nulle
                 lenC = len(c)
+                # L'ensemble des cellules de la colonne est NULL la colonne est declaree EMPTY
+                if (lCols[k]["areEmpty"] == "Y" and lenC != 0) :
+                    lCols[k]["areEmpty"] = "N"
+                # Une seule cellule a NULL et la colonne reste DEFINITIVEMENT comme nulle
                 if (lCols[k]["areNull"] == "N" and lenC == 0) :
                     lCols[k]["areNull"] = "Y"
-                elif (lCols[k]["areInt"] == "N" and c.isdigit()) :  
+                elif (lCols[k]["areInt"] == "N" and c.isdigit() and lCols[k]["areFloat"] != "Y") :  
                     lCols[k]["areInt"] = "Y"
-                elif (lCols[k]["areLong"] == "N" and not c.isdigit() and is_number(c)) : # 
-                    lCols[k]["areLong"] = "Y"
-                elif (lenC >= 2 and c[0] == '"' and c[-1] == '"') : 
-                    lCols[k]["varchar"] = max(lCols[k]["varchar"], lenC - 2)
-
+                elif (lCols[k]["areFloat"] == "N" and not c.isdigit() and is_number(c)) : # 
+                    lCols[k]["areFloat"] = "Y"
+                    lCols[k]["areInt"] = "N"
+                    # quel gabarit de decimal ? decimal(radix.decimal)
+                    try :
+                        (radix, decim) = c.split(".")
+                        (radixMax, decimMax) = lCols[k]["decimal"].split(".")
+                        #print("c[" + c + "] radix=[" + radix + "] decim[" + decim + "]", radix.isdigit(), decim.isdigit())
+                        if (radix.isdigit() and decim.isdigit()) :
+                            radixMax = max(int(radixMax), len(radix))
+                            decimMax = max(int(decimMax), len(decim))
+                            #print("radixMax=[" + str(radixMax) + "] decimMax[" + str(decimMax) + "]")
+                            lCols[k]["decimal"] = str(radixMax) + "." + str(decimMax)
+                    except :
+                        pass
+                #elif (lenC >= 2 and c[0] == '"' and c[-1] == '"') : 
+                else :
+                    if (lCols[k]["areInt"] == "Y" or lCols[k]["areFloat"] == "Y") :
+                        lCols[k]["varchar"] = "0"
+                    else :
+                        lCols[k]["varchar"] = max(lCols[k]["varchar"], lenC)
+    
+    fDatasOut.write("Analyse des " + str(nCols) + " colonnes de " + str(nLine) + " lignes" + "\n")
+    fDatasOut.write("name" + FileOutSep + "areEmpty" + FileOutSep + "areNull" + FileOutSep + "areInt" + FileOutSep + "areFloat" + FileOutSep + "decimal" + FileOutSep + "varchar" + "\n")
     for d in lCols :
-        print(d)
-    #fDatasOut.write(FileOutSep.join(cols) + "\n")
+        #print(d)
+        fDatasOut.write(d["name"] + FileOutSep + d["areEmpty"] + FileOutSep + d["areNull"] + FileOutSep + d["areInt"] + FileOutSep + d["areFloat"] + FileOutSep + str(d["decimal"]) + FileOutSep + str(d["varchar"]) + "\n")
             
     ## FIN
     print("Analyse des " + str(nCols) + " colonnes de " + str(nLine) + " lignes")
