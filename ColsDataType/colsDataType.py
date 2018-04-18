@@ -5,23 +5,7 @@
 from __future__ import unicode_literals
 
 """
-Importer les extractions du FRS BO dans la base de donnees
 
-(separateur est \t et non plus | )
-##  CE	AWZEddzi5GZMnYKK70cB5J8	5151	FullClient	Liste des automates sans activite depuis 24H	Root Folder/Documents CACP/Direction Bancaire et Technologies	22/09/2016 13:40:40	22/09/2016 13:40:40
-CREATE TABLE BO_DOCS_LISTE (
-	CR_ID INTEGER NOT NULL,
-	SI_ID INTEGER NOT NULL,
-	SI_CUID TEXT NOT NULL,
-	SI_NAME TEXT NOT NULL,
-	SI_KIND TEXT,
-	DOC_FOLDER TEXT,
-	DT_CREATE TEXT,
-	DT_MODIF TEXT NOT NULL
-);
-##  Quel est l'ordre des colonnes du fichier, par rapport aux colonnes de la table ?
-##  Definir les colonnes de la table, dans l'ordre dans lequel elles se presentent dans le fichier.
-##  chercher --> colsName = ("CR_ID", "SI_CUID", "SI_ID", "SI_KIND", "SI_NAME", "DOC_FOLDER", "DT_CREATE", "DT_MODIF")
 """
 
 import cgitb
@@ -51,7 +35,7 @@ tsNow = dtNow.timestamp()
 ##  
 FileInSep = TAB #";"
 FileInHeader = True
-FileOutSep = TAB
+FileOutSep = ";"
 FileOutHeader = False
 Verbose = True
 
@@ -131,9 +115,13 @@ if (True) :
             cols = line.split(FileInSep)
             if (nLine == 1) :
                 # Initialisation de la structure de donnees
-                nCols = len(cols) # 428
+                nCols = len(cols)
                 for c in cols :
                     lCols.append({"name":None, "areEmpty":"Y", "areNull":"N", "varchar":0, "areInt":"N", "areFloat":"N", "decimal":"0.0"})
+            
+            if (nLine > 999) :
+                break
+            
             # Faire test de numero de ligne
             if (FileInHeader and nLine == 1) : 
                 # On analyse la premiere ligne, c'est le header
@@ -144,6 +132,7 @@ if (True) :
             for k, c in enumerate(cols) :
                 ##  Analyse de la ligne
                 lenC = len(c)
+                # print("name=[" + lCols[k]["name"] + "] c=[" + c + "]")
                 # L'ensemble des cellules de la colonne est NULL la colonne est declaree EMPTY
                 if (lCols[k]["areEmpty"] == "Y" and lenC != 0) :
                     lCols[k]["areEmpty"] = "N"
@@ -159,21 +148,24 @@ if (True) :
                     try :
                         (radix, decim) = c.split(".")
                         (radixMax, decimMax) = lCols[k]["decimal"].split(".")
-                        #print("c[" + c + "] radix=[" + radix + "] decim[" + decim + "]", radix.isdigit(), decim.isdigit())
+                        print("name=[" + lCols[k]["name"] + "] c[" + c + "] radix=[" + radix + "] decim[" + decim + "]", radix.isdigit(), decim.isdigit())
                         if (radix.isdigit() and decim.isdigit()) :
-                            radixMax = max(int(radixMax), len(radix))
-                            decimMax = max(int(decimMax), len(decim))
-                            #print("radixMax=[" + str(radixMax) + "] decimMax[" + str(decimMax) + "]")
+                            radixMax = max(len(radixMax), len(radix))
+                            decimMax = max(len(decimMax), len(decim))
+                            # print("name=[" + lCols[k]["name"] + "] radixMax=[" + str(radixMax) + "] decimMax[" + str(decimMax) + "]")
                             lCols[k]["decimal"] = str(radixMax) + "." + str(decimMax)
+                            print("name=[" + lCols[k]["name"] + "] c=[" + c + "] decimal=[" + lCols[k]["decimal"] + "]")
                     except :
                         pass
                 #elif (lenC >= 2 and c[0] == '"' and c[-1] == '"') : 
                 else :
-                    if (lCols[k]["areInt"] == "Y" or lCols[k]["areFloat"] == "Y") :
-                        lCols[k]["varchar"] = "0"
-                    else :
-                        lCols[k]["varchar"] = max(lCols[k]["varchar"], lenC)
-    
+                    pass
+                #if (lCols[k]["areInt"] == "N" and lCols[k]["areFloat"] == "N") :
+                if (lCols[k]["areFloat"] == "N") :
+                    lCols[k]["varchar"] = max(int(lCols[k]["varchar"]), lenC)
+                    # lCols[k]["varchar"] = lenC
+                    #print("name=[" + lCols[k]["name"] + "] c=[" + c + "] varchar=[" + str(lenC) + "]")
+                    
     fDatasOut.write("Analyse des " + str(nCols) + " colonnes de " + str(nLine) + " lignes" + "\n")
     fDatasOut.write("name" + FileOutSep + "areEmpty" + FileOutSep + "areNull" + FileOutSep + "areInt" + FileOutSep + "areFloat" + FileOutSep + "decimal" + FileOutSep + "varchar" + "\n")
     for d in lCols :

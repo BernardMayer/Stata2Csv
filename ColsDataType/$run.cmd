@@ -27,8 +27,10 @@ set f=%homeDir%\ColsDatatypeindiv_2011q1
 @set datasOut="%f%.colsDataType.csv"
 rem %pyBin% %script% %datasIn% %datasOut% 
 
-@rem set f=%homeDir%\indiv_2012q4_234L
-@rem %pyBin% %script% %f%.csv %f%.colsDataType.csv
+set f=%homeDir%\indiv_2011q1
+%pyBin% %script% %f%.csv %f%.colsDataType.csv
+
+pause
 
 set f=%homeDir%\indiv_2011q1
 %pyBin% %script% %f%.csv %f%.colsDataType.csv
