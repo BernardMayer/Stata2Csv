@@ -38,17 +38,30 @@ FileInHeader = True
 FileOutSep = ";"
 FileOutHeader = False
 Verbose = True
-
+##  Detection nombre decimal
+reDecim = re.compile("^-{0,1}\d*[.,]{1,1}\d*$")
+reInt   = re.compile("^-{0,1}\d*$")
+reVarchar = re.compile("[a-zA-Z]+")
 
 #bShowIdentifier = os.getenv("dsXidentifier", False)
 
-def is_number(s):
+def is_number(s) :
     try:
         float(s)
         return True
     except ValueError:
         pass
     return False
+    
+def isInteger(s) :
+    if (s == "") :
+        return False
+    if (s.isdigit()) :
+        return True
+    if (s[0] == "-" and s[1:].isdigit()) :
+        return True
+    else :
+        return False
 
 ## fichier a traiter
 me = sys.argv[0]
@@ -72,7 +85,7 @@ if (not os.path.exists(datasIn)) :
 
 ## Creation du fichier de sortie
 fDatasOut = open(datasOut, "w")
-
+fDatasOutTmp = open(datasOut + ".tmp", "w")
 
     
     
@@ -117,11 +130,15 @@ if (True) :
                 # Initialisation de la structure de donnees
                 nCols = len(cols)
                 for c in cols :
-                    lCols.append({"name":None, "areEmpty":"Y", "areNull":"N", "varchar":0, "areInt":"N", "areFloat":"N", "decimal":"0.0"})
+                    lCols.append({"name":None, "areEmpty":"Y", "areNull":"N", "varchar":0, "areInt":"N", "areFloat":"N", "decimal":"0.0", "type":"?"})
             
-            if (nLine > 999) :
-                break
-            
+            # Passer a True pour se limiter aux 100 1eres lignes
+            if (False) :
+                if (nLine > 99) :
+                    break
+                else :
+                    fDatasOutTmp.write(line + "\n")
+                
             # Faire test de numero de ligne
             if (FileInHeader and nLine == 1) : 
                 # On analyse la premiere ligne, c'est le header
@@ -131,6 +148,7 @@ if (True) :
                 continue
             for k, c in enumerate(cols) :
                 ##  Analyse de la ligne
+                c = c.strip()
                 lenC = len(c)
                 # print("name=[" + lCols[k]["name"] + "] c=[" + c + "]")
                 # L'ensemble des cellules de la colonne est NULL la colonne est declaree EMPTY
@@ -139,38 +157,43 @@ if (True) :
                 # Une seule cellule a NULL et la colonne reste DEFINITIVEMENT comme nulle
                 if (lCols[k]["areNull"] == "N" and lenC == 0) :
                     lCols[k]["areNull"] = "Y"
-                elif (lCols[k]["areInt"] == "N" and c.isdigit() and lCols[k]["areFloat"] != "Y") :  
+                    continue
+                elif (lCols[k]["varchar"] == 0 and lCols[k]["areFloat"] == "N" and isInteger(c)) :
                     lCols[k]["areInt"] = "Y"
-                elif (lCols[k]["areFloat"] == "N" and not c.isdigit() and is_number(c)) : # 
-                    lCols[k]["areFloat"] = "Y"
-                    lCols[k]["areInt"] = "N"
-                    # quel gabarit de decimal ? decimal(radix.decimal)
+                    lCols[k]["type"] = "I"
+                    continue
+                elif (lCols[k]["varchar"] == 0 and reDecim.match(c)) :    
                     try :
                         (radix, decim) = c.split(".")
                         (radixMax, decimMax) = lCols[k]["decimal"].split(".")
-                        print("name=[" + lCols[k]["name"] + "] c[" + c + "] radix=[" + radix + "] decim[" + decim + "]", radix.isdigit(), decim.isdigit())
+                        # print("name=[" + lCols[k]["name"] + "] c[" + c + "] radix=[" + radix + "] decim[" + decim + "]", radix.isdigit(), decim.isdigit())
                         if (radix.isdigit() and decim.isdigit()) :
-                            radixMax = max(len(radixMax), len(radix))
-                            decimMax = max(len(decimMax), len(decim))
-                            # print("name=[" + lCols[k]["name"] + "] radixMax=[" + str(radixMax) + "] decimMax[" + str(decimMax) + "]")
+                            radixMax = max(int(radixMax), len(radix))
+                            decimMax = max(int(decimMax), len(decim))
                             lCols[k]["decimal"] = str(radixMax) + "." + str(decimMax)
-                            print("name=[" + lCols[k]["name"] + "] c=[" + c + "] decimal=[" + lCols[k]["decimal"] + "]")
+                            lCols[k]["areFloat"] = "Y"
+                            lCols[k]["areInt"] = "N"
+                            lCols[k]["type"] = "D"
+                    # print("name=[" + lCols[k]["name"] + "] radixMax=[" + str(radixMax) + "] decimMax[" + str(decimMax) + "]")
+                            # print("name=[" + lCols[k]["name"] + "] c=[" + c + "] decimal=[" + lCols[k]["decimal"] + "]")
                     except :
                         pass
-                #elif (lenC >= 2 and c[0] == '"' and c[-1] == '"') : 
-                else :
-                    pass
-                #if (lCols[k]["areInt"] == "N" and lCols[k]["areFloat"] == "N") :
-                if (lCols[k]["areFloat"] == "N") :
+                        # print("PB ! name=[" + lCols[k]["name"] + "] c[" + c + "]")
+
+                    continue
+                elif (lenC > 0) :
                     lCols[k]["varchar"] = max(int(lCols[k]["varchar"]), lenC)
-                    # lCols[k]["varchar"] = lenC
-                    #print("name=[" + lCols[k]["name"] + "] c=[" + c + "] varchar=[" + str(lenC) + "]")
+                    # print("name=[" + lCols[k]["name"] + "] c=[" + c + "] varchar=[" + str(lCols[k]["varchar"]) + "]")
+                    lCols[k]["areInt"] = "N"
+                    lCols[k]["areFloat"] = "N"
+                    lCols[k]["type"] = "V"
+
                     
     fDatasOut.write("Analyse des " + str(nCols) + " colonnes de " + str(nLine) + " lignes" + "\n")
-    fDatasOut.write("name" + FileOutSep + "areEmpty" + FileOutSep + "areNull" + FileOutSep + "areInt" + FileOutSep + "areFloat" + FileOutSep + "decimal" + FileOutSep + "varchar" + "\n")
+    fDatasOut.write("name" + FileOutSep + "areEmpty" + FileOutSep + "areNull" + FileOutSep + "areInt" + FileOutSep + "areFloat" + FileOutSep + "decimal" + FileOutSep + "varchar" + FileOutSep + "type" + "\n")
     for d in lCols :
         #print(d)
-        fDatasOut.write(d["name"] + FileOutSep + d["areEmpty"] + FileOutSep + d["areNull"] + FileOutSep + d["areInt"] + FileOutSep + d["areFloat"] + FileOutSep + str(d["decimal"]) + FileOutSep + str(d["varchar"]) + "\n")
+        fDatasOut.write(d["name"] + FileOutSep + d["areEmpty"] + FileOutSep + d["areNull"] + FileOutSep + d["areInt"] + FileOutSep + d["areFloat"] + FileOutSep + str(d["decimal"]) + FileOutSep + str(d["varchar"]) + FileOutSep + str(d["type"]) + "\n")
             
     ## FIN
     print("Analyse des " + str(nCols) + " colonnes de " + str(nLine) + " lignes")
