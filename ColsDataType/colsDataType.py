@@ -35,7 +35,7 @@ tsNow = dtNow.timestamp()
 ##  
 FileInSep = TAB #";"
 FileInHeader = True
-FileOutSep = ";"
+FileOutSep = TAB #";"
 FileOutHeader = False
 Verbose = True
 ##  Detection nombre decimal
@@ -132,9 +132,9 @@ if (True) :
                 for c in cols :
                     lCols.append({"name":None, "areEmpty":"Y", "areNull":"N", "varchar":0, "areInt":"N", "areFloat":"N", "decimal":"0.0", "type":"?"})
             
-            # Passer a True pour se limiter aux 100 1eres lignes
-            if (False) :
-                if (nLine > 99) :
+            # Passer a True pour se limiter aux 1000 1eres lignes
+            if (True) :
+                if (nLine > 999) :
                     break
                 else :
                     fDatasOutTmp.write(line + "\n")
@@ -181,7 +181,7 @@ if (True) :
                         # print("PB ! name=[" + lCols[k]["name"] + "] c[" + c + "]")
 
                     continue
-                elif (lenC > 0) :
+                elif (lenC > 0 and lCols[k]["areFloat"] == "N" and lCols[k]["areFloat"] == "N" ) :
                     lCols[k]["varchar"] = max(int(lCols[k]["varchar"]), lenC)
                     # print("name=[" + lCols[k]["name"] + "] c=[" + c + "] varchar=[" + str(lCols[k]["varchar"]) + "]")
                     lCols[k]["areInt"] = "N"
