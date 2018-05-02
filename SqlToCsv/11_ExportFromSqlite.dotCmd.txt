@@ -1,0 +1,8 @@
+.mode csv
+.separator "\t"
+.header on
+-- .once C:\\Laurence\\M1-S2\\Datas_OUT\\acteu6_1.csv
+select *
+from Individus
+where acteu6 = 1
+;

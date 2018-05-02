@@ -1,0 +1,168 @@
+/* Transformation des fichiers stata en fichiers csv string quoted */
+/* Le but est d'extraire la ligne d'entete, suivie du moins de lignes possible */
+/* 
+	batch mode 
+	"c:\Laurence\M1-S2\StataCorp Stata 14.2\Stata.exe" /b do "C:\Laurence\M1-S2\Datas_IN\ExportDta2Csv.do.txt"
+*/
+
+* Usage du ; comme fin d'instruction au lien de fin de ligne
+#delimit ;
+
+* Le log est en chemin absolu, sinon, c'est le repertoire d'execution
+log using "C:\Laurence\M1-S2\Datas_IN\1_Headers\1_ExportDtaHeader.log.txt", replace;
+
+. use "C:\Laurence\M1-S2\Datas_IN\0_Stata\indiv041.dta", clear;
+. export delimited using "C:\Laurence\M1-S2\Datas_IN\1_Headers\indiv_2004q1-header.csv" in 1/1, delimiter(tab) replace;
+
+. use "C:\Laurence\M1-S2\Datas_IN\0_Stata\indiv042.dta", clear;
+. export delimited using "C:\Laurence\M1-S2\Datas_IN\1_Headers\indiv_2004q2-header.csv" in 1/1, delimiter(tab) replace;
+
+. use "C:\Laurence\M1-S2\Datas_IN\0_Stata\indiv043.dta", clear;
+. export delimited using "C:\Laurence\M1-S2\Datas_IN\1_Headers\indiv_2004q3-header.csv" in 1/1, delimiter(tab) replace;
+
+. use "C:\Laurence\M1-S2\Datas_IN\0_Stata\indiv044.dta", clear;
+. export delimited using "C:\Laurence\M1-S2\Datas_IN\1_Headers\indiv_2004q4-header.csv" in 1/1, delimiter(tab) replace;
+
+. use "C:\Laurence\M1-S2\Datas_IN\0_Stata\indiv051.dta", clear;
+. export delimited using "C:\Laurence\M1-S2\Datas_IN\1_Headers\indiv_2005q1-header.csv" in 1/1, delimiter(tab) replace;
+
+. use "C:\Laurence\M1-S2\Datas_IN\0_Stata\indiv052.dta", clear;
+. export delimited using "C:\Laurence\M1-S2\Datas_IN\1_Headers\indiv_2005q2-header.csv" in 1/1, delimiter(tab) replace;
+
+. use "C:\Laurence\M1-S2\Datas_IN\0_Stata\indiv053.dta", clear;
+. export delimited using "C:\Laurence\M1-S2\Datas_IN\1_Headers\indiv_2005q3-header.csv" in 1/1, delimiter(tab) replace;
+
+. use "C:\Laurence\M1-S2\Datas_IN\0_Stata\indiv054.dta", clear;
+. export delimited using "C:\Laurence\M1-S2\Datas_IN\1_Headers\indiv_2005q4-header.csv" in 1/1, delimiter(tab) replace;
+
+. use "C:\Laurence\M1-S2\Datas_IN\0_Stata\indiv061.dta", clear;
+. export delimited using "C:\Laurence\M1-S2\Datas_IN\1_Headers\indiv_2006q1-header.csv" in 1/1, delimiter(tab) replace;
+
+. use "C:\Laurence\M1-S2\Datas_IN\0_Stata\indiv062.dta", clear;
+. export delimited using "C:\Laurence\M1-S2\Datas_IN\1_Headers\indiv_2006q2-header.csv" in 1/1, delimiter(tab) replace;
+
+. use "C:\Laurence\M1-S2\Datas_IN\0_Stata\indiv063.dta", clear;
+. export delimited using "C:\Laurence\M1-S2\Datas_IN\1_Headers\indiv_2006q3-header.csv" in 1/1, delimiter(tab) replace;
+
+. use "C:\Laurence\M1-S2\Datas_IN\0_Stata\indiv064.dta", clear;
+. export delimited using "C:\Laurence\M1-S2\Datas_IN\1_Headers\indiv_2006q4-header.csv" in 1/1, delimiter(tab) replace;
+
+. use "C:\Laurence\M1-S2\Datas_IN\0_Stata\indiv071.dta", clear;
+. export delimited using "C:\Laurence\M1-S2\Datas_IN\1_Headers\indiv_2007q1-header.csv" in 1/1, delimiter(tab) replace;
+
+. use "C:\Laurence\M1-S2\Datas_IN\0_Stata\indiv072.dta", clear;
+. export delimited using "C:\Laurence\M1-S2\Datas_IN\1_Headers\indiv_2007q2-header.csv" in 1/1, delimiter(tab) replace;
+
+. use "C:\Laurence\M1-S2\Datas_IN\0_Stata\indiv073.dta", clear;
+. export delimited using "C:\Laurence\M1-S2\Datas_IN\1_Headers\indiv_2007q3-header.csv" in 1/1, delimiter(tab) replace;
+
+. use "C:\Laurence\M1-S2\Datas_IN\0_Stata\indiv074.dta", clear;
+. export delimited using "C:\Laurence\M1-S2\Datas_IN\1_Headers\indiv_2007q4-header.csv" in 1/1, delimiter(tab) replace;
+
+. use "C:\Laurence\M1-S2\Datas_IN\0_Stata\indiv081.dta", clear;
+. export delimited using "C:\Laurence\M1-S2\Datas_IN\1_Headers\indiv_2008q1-header.csv" in 1/1, delimiter(tab) replace;
+
+. use "C:\Laurence\M1-S2\Datas_IN\0_Stata\indiv082.dta", clear;
+. export delimited using "C:\Laurence\M1-S2\Datas_IN\1_Headers\indiv_2008q2-header.csv" in 1/1, delimiter(tab) replace;
+
+. use "C:\Laurence\M1-S2\Datas_IN\0_Stata\indiv083.dta", clear;
+. export delimited using "C:\Laurence\M1-S2\Datas_IN\1_Headers\indiv_2008q3-header.csv" in 1/1, delimiter(tab) replace;
+
+. use "C:\Laurence\M1-S2\Datas_IN\0_Stata\indiv084.dta", clear;
+. export delimited using "C:\Laurence\M1-S2\Datas_IN\1_Headers\indiv_2008q4-header.csv" in 1/1, delimiter(tab) replace;
+
+. use "C:\Laurence\M1-S2\Datas_IN\0_Stata\indiv091.dta", clear;
+. export delimited using "C:\Laurence\M1-S2\Datas_IN\1_Headers\indiv_2009q1-header.csv" in 1/1, delimiter(tab) replace;
+
+. use "C:\Laurence\M1-S2\Datas_IN\0_Stata\indiv092.dta", clear;
+. export delimited using "C:\Laurence\M1-S2\Datas_IN\1_Headers\indiv_2009q2-header.csv" in 1/1, delimiter(tab) replace;
+
+. use "C:\Laurence\M1-S2\Datas_IN\0_Stata\indiv093.dta", clear;
+. export delimited using "C:\Laurence\M1-S2\Datas_IN\1_Headers\indiv_2009q3-header.csv" in 1/1, delimiter(tab) replace;
+
+. use "C:\Laurence\M1-S2\Datas_IN\0_Stata\indiv094.dta", clear;
+. export delimited using "C:\Laurence\M1-S2\Datas_IN\1_Headers\indiv_2009q4-header.csv" in 1/1, delimiter(tab) replace;
+
+. use "C:\Laurence\M1-S2\Datas_IN\0_Stata\indiv101.dta", clear;
+. export delimited using "C:\Laurence\M1-S2\Datas_IN\1_Headers\indiv_2010q1-header.csv" in 1/1, delimiter(tab) replace;
+
+. use "C:\Laurence\M1-S2\Datas_IN\0_Stata\indiv102.dta", clear;
+. export delimited using "C:\Laurence\M1-S2\Datas_IN\1_Headers\indiv_2010q2-header.csv" in 1/1, delimiter(tab) replace;
+
+. use "C:\Laurence\M1-S2\Datas_IN\0_Stata\indiv103.dta", clear;
+. export delimited using "C:\Laurence\M1-S2\Datas_IN\1_Headers\indiv_2010q3-header.csv" in 1/1, delimiter(tab) replace;
+
+. use "C:\Laurence\M1-S2\Datas_IN\0_Stata\indiv104.dta", clear;
+. export delimited using "C:\Laurence\M1-S2\Datas_IN\1_Headers\indiv_2010q4-header.csv" in 1/1, delimiter(tab) replace;
+
+. use "C:\Laurence\M1-S2\Datas_IN\0_Stata\indiv111.dta", clear;
+. export delimited using "C:\Laurence\M1-S2\Datas_IN\1_Headers\indiv_2011q1-header.csv" in 1/1, delimiter(tab) replace;
+
+. use "C:\Laurence\M1-S2\Datas_IN\0_Stata\indiv112.dta", clear;
+. export delimited using "C:\Laurence\M1-S2\Datas_IN\1_Headers\indiv_2011q2-header.csv" in 1/1, delimiter(tab) replace;
+
+. use "C:\Laurence\M1-S2\Datas_IN\0_Stata\indiv113.dta", clear;
+. export delimited using "C:\Laurence\M1-S2\Datas_IN\1_Headers\indiv_2011q3-header.csv" in 1/1, delimiter(tab) replace;
+
+. use "C:\Laurence\M1-S2\Datas_IN\0_Stata\indiv114.dta", clear;
+. export delimited using "C:\Laurence\M1-S2\Datas_IN\1_Headers\indiv_2011q4-header.csv" in 1/1, delimiter(tab) replace;
+
+. use "C:\Laurence\M1-S2\Datas_IN\0_Stata\indiv121.dta", clear;
+. export delimited using "C:\Laurence\M1-S2\Datas_IN\1_Headers\indiv_2012q1-header.csv" in 1/1, delimiter(tab) replace;
+
+. use "C:\Laurence\M1-S2\Datas_IN\0_Stata\indiv122.dta", clear;
+. export delimited using "C:\Laurence\M1-S2\Datas_IN\1_Headers\indiv_2012q2-header.csv" in 1/1, delimiter(tab) replace;
+
+. use "C:\Laurence\M1-S2\Datas_IN\0_Stata\indiv123.dta", clear;
+. export delimited using "C:\Laurence\M1-S2\Datas_IN\1_Headers\indiv_2012q3-header.csv" in 1/1, delimiter(tab) replace;
+
+. use "C:\Laurence\M1-S2\Datas_IN\0_Stata\indiv124.dta", clear;
+. export delimited using "C:\Laurence\M1-S2\Datas_IN\1_Headers\indiv_2012q4-header.csv" in 1/1, delimiter(tab) replace;
+
+. use "C:\Laurence\M1-S2\Datas_IN\0_Stata\indiv131.dta", clear;
+. export delimited using "C:\Laurence\M1-S2\Datas_IN\1_Headers\indiv_2013q1-header.csv" in 1/1, delimiter(tab) replace;
+
+. use "C:\Laurence\M1-S2\Datas_IN\0_Stata\indiv132.dta", clear;
+. export delimited using "C:\Laurence\M1-S2\Datas_IN\1_Headers\indiv_2013q2-header.csv" in 1/1, delimiter(tab) replace;
+
+. use "C:\Laurence\M1-S2\Datas_IN\0_Stata\indiv133.dta", clear;
+. export delimited using "C:\Laurence\M1-S2\Datas_IN\1_Headers\indiv_2013q3-header.csv" in 1/1, delimiter(tab) replace;
+
+. use "C:\Laurence\M1-S2\Datas_IN\0_Stata\indiv134.dta", clear;
+. export delimited using "C:\Laurence\M1-S2\Datas_IN\1_Headers\indiv_2013q4-header.csv" in 1/1, delimiter(tab) replace;
+
+. use "C:\Laurence\M1-S2\Datas_IN\0_Stata\indiv141.dta", clear;
+. export delimited using "C:\Laurence\M1-S2\Datas_IN\1_Headers\indiv_2014q1-header.csv" in 1/1, delimiter(tab) replace;
+
+. use "C:\Laurence\M1-S2\Datas_IN\0_Stata\indiv142.dta", clear;
+. export delimited using "C:\Laurence\M1-S2\Datas_IN\1_Headers\indiv_2014q2-header.csv" in 1/1, delimiter(tab) replace;
+
+. use "C:\Laurence\M1-S2\Datas_IN\0_Stata\indiv143.dta", clear;
+. export delimited using "C:\Laurence\M1-S2\Datas_IN\1_Headers\indiv_2014q3-header.csv" in 1/1, delimiter(tab) replace;
+
+. use "C:\Laurence\M1-S2\Datas_IN\0_Stata\indiv144.dta", clear;
+. export delimited using "C:\Laurence\M1-S2\Datas_IN\1_Headers\indiv_2014q4-header.csv" in 1/1, delimiter(tab) replace;
+
+. use "C:\Laurence\M1-S2\Datas_IN\0_Stata\indiv151.dta", clear;
+. export delimited using "C:\Laurence\M1-S2\Datas_IN\1_Headers\indiv_2015q1-header.csv" in 1/1, delimiter(tab) replace;
+
+. use "C:\Laurence\M1-S2\Datas_IN\0_Stata\indiv152.dta", clear;
+. export delimited using "C:\Laurence\M1-S2\Datas_IN\1_Headers\indiv_2015q2-header.csv" in 1/1, delimiter(tab) replace;
+
+. use "C:\Laurence\M1-S2\Datas_IN\0_Stata\indiv153.dta", clear;
+. export delimited using "C:\Laurence\M1-S2\Datas_IN\1_Headers\indiv_2015q3-header.csv" in 1/1, delimiter(tab) replace;
+
+. use "C:\Laurence\M1-S2\Datas_IN\0_Stata\indiv154.dta", clear;
+. export delimited using "C:\Laurence\M1-S2\Datas_IN\1_Headers\indiv_2015q4-header.csv" in 1/1, delimiter(tab) replace;
+
+. use "C:\Laurence\M1-S2\Datas_IN\0_Stata\indiv161.dta", clear;
+. export delimited using "C:\Laurence\M1-S2\Datas_IN\1_Headers\indiv_2016q1-header.csv" in 1/1, delimiter(tab) replace;
+
+. use "C:\Laurence\M1-S2\Datas_IN\0_Stata\indiv162.dta", clear;
+. export delimited using "C:\Laurence\M1-S2\Datas_IN\1_Headers\indiv_2016q2-header.csv" in 1/1, delimiter(tab) replace;
+
+. use "C:\Laurence\M1-S2\Datas_IN\0_Stata\indiv163.dta", clear;
+. export delimited using "C:\Laurence\M1-S2\Datas_IN\1_Headers\indiv_2016q3-header.csv" in 1/1, delimiter(tab) replace;
+
+. use "C:\Laurence\M1-S2\Datas_IN\0_Stata\indiv164.dta", clear;
+. export delimited using "C:\Laurence\M1-S2\Datas_IN\1_Headers\indiv_2016q4-header.csv" in 1/1, delimiter(tab) replace;
